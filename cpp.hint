@@ -1,0 +1,7 @@
+// 提示文件帮助 Visual Studio IDE 解释 Visual C++ 标识符,
+// 如函数和宏的名称。
+// 有关详细信息，请参见 https://go.microsoft.com/fwlink/?linkid=865984
+#define wxMouseEventHandler(func) wxEVENT_HANDLER_CAST(wxMouseEventFunction, func)
+#define wxEVT_COMMAND_MENU_SELECTED
+#define wxCommandEventHandler(func) wxEVENT_HANDLER_CAST(wxCommandEventFunction, func)
+#define EVT_MENU(winid, func) wx__DECLARE_EVT1(wxEVT_MENU, winid, wxCommandEventHandler(func))
