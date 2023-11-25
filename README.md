@@ -4,4 +4,4 @@
 ### 由222寝室合力打造
 
 wxFormBuilder.h是头文件
-是源文件
+ComprehensiveDesign.cpp是源文件
