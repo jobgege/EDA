@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -34,6 +35,7 @@ private:
 	bool drawD;
 	bool drawG;
 	bool drawB;
+	bool drawC;
 protected:
 	wxMenuBar* m_menubar1;
 	wxMenu* m_menu1;
@@ -48,8 +50,11 @@ public:
 	void OnLeftDown(wxMouseEvent& event);
 
 	void OnAddD_Dual_CommonCathod_KAA_Split(wxCommandEvent& event);
-	
+
 	void OnAddGND(wxCommandEvent& event);
 
 	void OnAddBattery(wxCommandEvent& event);
+
+	void OnAddCapacitor(wxCommandEvent& event);
+
 };

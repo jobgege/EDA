@@ -1,12 +1,64 @@
+/*#include <wx/wx.h>
+
+class MyFrame : public wxFrame
+{
+public:
+	MyFrame() : wxFrame(NULL, wxID_ANY, "Draw Triangle with Perpendicular Line and Text")
+	{
+		SetSize(800, 600);//边框大小 长 宽
+		Bind(wxEVT_LEFT_DOWN, &MyFrame::OnLeftDown, this);
+
+	}
+
+	void OnPaint(wxPaintEvent& event)
+	{
+		wxPaintDC dc(this);
+
+		dc.SetBackground(*wxWHITE_BRUSH);
+		dc.Clear();
+
+	}
+
+	void OnLeftDown(wxMouseEvent& event)
+	{
+		wxPoint pos = event.GetPosition();//捕捉鼠标位置
+		wxClientDC dc(this);
+
+		dc.DrawLine(pos.x-16, pos.y+8, pos.x+16, pos.y+8);//电容器 上半 水平 部分
+		dc.DrawLine(pos.x-16, pos.y-8, pos.x+16, pos.y-8);//电容器 下半 水平 部分
+		dc.DrawLine(pos.x ,  pos.y+8, pos.x ,  pos.y+40);//电容器 上半 竖直 部分
+		dc.DrawLine(pos.x,   pos.y-8, pos.x,  pos.y-40);//电容器 下半 竖直 部分
+		dc.DrawText("C", pos.x-3, pos.y-8);
+	}
+
+	DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+EVT_PAINT(MyFrame::OnPaint)
+END_EVENT_TABLE()
+
+class MyApp : public wxApp
+{
+public:
+	virtual bool OnInit()
+	{
+		MyFrame* frame = new MyFrame();
+		frame->Show(true);
+		return true;
+	}
+};
+*/
+
 #include "wxFormBuilder.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
 wxBEGIN_EVENT_TABLE(MyFrame1, wxFrame)
-	EVT_PAINT(MyFrame1::OnPaint)
-	EVT_MENU(wxID_ANY, MyFrame1::OnAddD_Dual_CommonCathod_KAA_Split)
-	EVT_MENU(wxID_ANY, MyFrame1::OnAddGND)
-	EVT_MENU(wxID_ANY, MyFrame1::OnAddBattery)
+EVT_PAINT(MyFrame1::OnPaint)
+EVT_MENU(wxID_ANY, MyFrame1::OnAddD_Dual_CommonCathod_KAA_Split)
+EVT_MENU(wxID_ANY, MyFrame1::OnAddGND)
+EVT_MENU(wxID_ANY, MyFrame1::OnAddBattery)
 wxEND_EVENT_TABLE()
 
 
@@ -74,9 +126,15 @@ MyFrame1::MyFrame1(wxWindow* parent, wxWindowID id, const wxString& title, const
 	m_menuItem12 = new wxMenuItem(m_menu1, wxID_ANY, wxString(wxT("Battery")), wxEmptyString, wxITEM_NORMAL);
 	m_menu2->Append(m_menuItem12);
 
+	wxMenuItem* m_menuItem13;
+	m_menuItem13 = new wxMenuItem(m_menu1, wxID_ANY, wxString(wxT("Capacitor")), wxEmptyString, wxITEM_NORMAL);
+	m_menu2->Append(m_menuItem13);
+
+
 	Connect(m_menuItem10->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame1::OnAddD_Dual_CommonCathod_KAA_Split));
 	Connect(m_menuItem11->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame1::OnAddGND));
 	Connect(m_menuItem12->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame1::OnAddBattery));
+	Connect(m_menuItem13->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame1::OnAddCapacitor));
 
 	this->SetMenuBar(m_menubar1);
 
@@ -97,23 +155,31 @@ void MyFrame1::OnAddD_Dual_CommonCathod_KAA_Split(wxCommandEvent& event)
 	drawD = true;
 	drawG = false;
 	drawB = false;
+	drawC = false;
 }
 
 void MyFrame1::OnAddGND(wxCommandEvent& event) {
 	drawD = false;
 	drawG = true;
 	drawB = false;
+	drawC = false;
 }
 
 void MyFrame1::OnAddBattery(wxCommandEvent& event) {
 	drawD = false;
 	drawG = false;
 	drawB = true;
+	drawC = false;
 }
-
+void MyFrame1::OnAddCapacitor(wxCommandEvent& event) {
+	drawD = false;
+	drawG = false;
+	drawB = false;
+	drawC = true;
+}
 void MyFrame1::OnLeftDown(wxMouseEvent& event)
 {
-	if (!m_isDrawing && (drawD || drawG || drawB)) {
+	if (!m_isDrawing && (drawD || drawG || drawB || drawC)) {
 		m_startPos = event.GetPosition();
 		m_isDrawing = true;
 	}
@@ -218,6 +284,18 @@ void MyFrame1::OnLeftDown(wxMouseEvent& event)
 		dc.DrawRotatedText(text3, x + 5 - textWidth / 2, y - 10 - textHeight / 2, 0);
 		drawB = false;
 	}
+	if (m_isDrawing && drawC) {
+		wxPoint pos = event.GetPosition();//捕捉鼠标位置
+		wxClientDC dc(this);
+
+		dc.DrawLine(pos.x - 16, pos.y + 8, pos.x + 16, pos.y + 8);//电容器 上半 水平 部分
+		dc.DrawLine(pos.x - 16, pos.y - 8, pos.x + 16, pos.y - 8);//电容器 下半 水平 部分
+		dc.DrawLine(pos.x, pos.y + 8, pos.x, pos.y + 40);//电容器 上半 竖直 部分
+		dc.DrawLine(pos.x, pos.y - 8, pos.x, pos.y - 40);//电容器 下半 竖直 部分
+		dc.DrawText("C", pos.x - 3, pos.y - 8);
+		drawC = false;
+	}
+
 }
 
 
